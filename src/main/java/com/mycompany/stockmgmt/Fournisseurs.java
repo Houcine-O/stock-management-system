@@ -4,6 +4,11 @@
  */
 package com.mycompany.stockmgmt;
 
+import java.sql.*;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import net.proteanit.sql.DbUtils;
+
 /**
  *
  * @author houcine
@@ -15,6 +20,7 @@ public class Fournisseurs extends javax.swing.JFrame {
      */
     public Fournisseurs() {
         initComponents();
+        displayFournisseurs();
     }
 
     /**
@@ -30,19 +36,19 @@ public class Fournisseurs extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        fournisseurNom = new javax.swing.JTextField();
         jLabel19 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        fournisseurPhone = new javax.swing.JTextField();
         jLabel20 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        fournisseurEmail = new javax.swing.JTextField();
         jLabel21 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        delFournisseur = new javax.swing.JButton();
+        updateFournisseur = new javax.swing.JButton();
+        addFournisseur = new javax.swing.JButton();
         jSeparator7 = new javax.swing.JSeparator();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
-        jTextField4 = new javax.swing.JTextField();
+        fournisseurList = new javax.swing.JTable();
+        fournisseurAdresse = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -80,43 +86,55 @@ public class Fournisseurs extends javax.swing.JFrame {
         jLabel18.setFont(new java.awt.Font("Microsoft YaHei", 0, 16)); // NOI18N
         jLabel18.setText("Nom Fournisseur");
 
-        jTextField1.setFont(new java.awt.Font("Microsoft YaHei", 0, 14)); // NOI18N
+        fournisseurNom.setFont(new java.awt.Font("Microsoft YaHei", 0, 14)); // NOI18N
 
         jLabel19.setFont(new java.awt.Font("Microsoft YaHei", 0, 16)); // NOI18N
         jLabel19.setText("Télephone");
 
-        jTextField2.setFont(new java.awt.Font("Microsoft YaHei", 0, 14)); // NOI18N
+        fournisseurPhone.setFont(new java.awt.Font("Microsoft YaHei", 0, 14)); // NOI18N
 
         jLabel20.setFont(new java.awt.Font("Microsoft YaHei", 0, 16)); // NOI18N
         jLabel20.setText("Email");
 
-        jTextField3.setFont(new java.awt.Font("Microsoft YaHei", 0, 14)); // NOI18N
+        fournisseurEmail.setFont(new java.awt.Font("Microsoft YaHei", 0, 14)); // NOI18N
 
         jLabel21.setFont(new java.awt.Font("Microsoft YaHei", 0, 16)); // NOI18N
         jLabel21.setText("Adresse");
 
-        jButton1.setBackground(java.awt.Color.red);
-        jButton1.setFont(new java.awt.Font("Microsoft YaHei", 1, 14)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Supprimer");
-
-        jButton2.setBackground(java.awt.Color.orange);
-        jButton2.setFont(new java.awt.Font("Microsoft YaHei", 1, 14)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("Mise à jour");
-
-        jButton3.setBackground(new java.awt.Color(51, 204, 0));
-        jButton3.setFont(new java.awt.Font("Microsoft YaHei", 1, 14)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setText("Nouveau");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        delFournisseur.setBackground(java.awt.Color.red);
+        delFournisseur.setFont(new java.awt.Font("Microsoft YaHei", 1, 14)); // NOI18N
+        delFournisseur.setForeground(new java.awt.Color(255, 255, 255));
+        delFournisseur.setText("Supprimer");
+        delFournisseur.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                delFournisseurActionPerformed(evt);
             }
         });
 
-        jTable2.setFont(new java.awt.Font("Microsoft YaHei", 0, 14)); // NOI18N
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        updateFournisseur.setBackground(java.awt.Color.orange);
+        updateFournisseur.setFont(new java.awt.Font("Microsoft YaHei", 1, 14)); // NOI18N
+        updateFournisseur.setForeground(new java.awt.Color(255, 255, 255));
+        updateFournisseur.setText("Mise à jour");
+        updateFournisseur.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateFournisseurActionPerformed(evt);
+            }
+        });
+
+        addFournisseur.setBackground(new java.awt.Color(51, 204, 0));
+        addFournisseur.setFont(new java.awt.Font("Microsoft YaHei", 1, 14)); // NOI18N
+        addFournisseur.setForeground(new java.awt.Color(255, 255, 255));
+        addFournisseur.setText("Nouveau");
+        addFournisseur.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addFournisseurActionPerformed(evt);
+            }
+        });
+
+        fournisseurList.setBackground(new java.awt.Color(255, 255, 255));
+        fournisseurList.setFont(new java.awt.Font("Microsoft YaHei", 0, 17)); // NOI18N
+        fournisseurList.setForeground(new java.awt.Color(0, 51, 51));
+        fournisseurList.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -127,9 +145,20 @@ public class Fournisseurs extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        fournisseurList.setGridColor(new java.awt.Color(0, 102, 153));
+        fournisseurList.setRowHeight(30);
+        fournisseurList.setSelectionBackground(new java.awt.Color(0, 153, 204));
+        fournisseurList.setSelectionForeground(new java.awt.Color(204, 255, 255));
+        fournisseurList.setShowGrid(false);
+        fournisseurList.setShowHorizontalLines(true);
+        fournisseurList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                fournisseurListMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(fournisseurList);
 
-        jTextField4.setFont(new java.awt.Font("Microsoft YaHei", 0, 14)); // NOI18N
+        fournisseurAdresse.setFont(new java.awt.Font("Microsoft YaHei", 0, 14)); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -145,33 +174,33 @@ public class Fournisseurs extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(delFournisseur, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(addFournisseur, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(220, 220, 220)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(updateFournisseur, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(fournisseurNom, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(fournisseurPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(fournisseurEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(fournisseurAdresse, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(180, 180, 180))
         );
 
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel18, jLabel19, jLabel20, jLabel21, jTextField1, jTextField2, jTextField3});
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {fournisseurEmail, fournisseurNom, fournisseurPhone, jLabel18, jLabel19, jLabel20, jLabel21});
 
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton1, jButton2, jButton3});
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {addFournisseur, delFournisseur, updateFournisseur});
 
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -182,12 +211,12 @@ public class Fournisseurs extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGap(36, 36, 36)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(fournisseurPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel2Layout.createSequentialGroup()
                             .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(fournisseurNom, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanel2Layout.createSequentialGroup()
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -195,13 +224,13 @@ public class Fournisseurs extends javax.swing.JFrame {
                                 .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jTextField3)
-                                .addComponent(jTextField4)))))
+                                .addComponent(fournisseurEmail)
+                                .addComponent(fournisseurAdresse)))))
                 .addGap(40, 40, 40)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(updateFournisseur, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(addFournisseur, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(delFournisseur, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(34, 34, 34)
                 .addComponent(jSeparator7, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -209,7 +238,7 @@ public class Fournisseurs extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButton1, jButton2, jButton3});
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {addFournisseur, delFournisseur, updateFournisseur});
 
         jLabel1.setFont(new java.awt.Font("Microsoft YaHei", 0, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -380,14 +409,146 @@ public class Fournisseurs extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+    Connection con = null;
+    Statement st = null,stC = null;
+    ResultSet rs = null,rsC = null;
+    int n=0;
+    private void addFournisseurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addFournisseurActionPerformed
+        if(fournisseurNom.getText().isEmpty() || fournisseurPhone.getText().isEmpty() || 
+           fournisseurEmail.getText().isEmpty() || fournisseurAdresse.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs !");
+        }
+        else{
+            try { 
+                countId();
+                con = DriverManager.getConnection("jdbc:mysql://localhost:3306/stockdb","root","");
+                PreparedStatement add = con.prepareStatement("insert into fournisseur values(?,?,?,?,?)");
+                add.setInt(1, fournisseurId);
+                add.setString(2, fournisseurNom.getText());
+                add.setString(3, fournisseurPhone.getText());
+                add.setString(4, fournisseurEmail.getText());
+                add.setString(5, fournisseurAdresse.getText());
+                int row = add.executeUpdate();
+                n++;
+                JOptionPane.showMessageDialog(this, "Fournisseur ajouté");
+                con.close();
+                displayFournisseurs();                
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+            }
+        }
+    }//GEN-LAST:event_addFournisseurActionPerformed
+    int key=0;
+    private void fournisseurListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fournisseurListMouseClicked
+        DefaultTableModel model = (DefaultTableModel) fournisseurList.getModel();
+        int myIndex = fournisseurList.getSelectedRow();
+        key = Integer.parseInt(model.getValueAt(myIndex, 0).toString());
+        fournisseurNom.setText(model.getValueAt(myIndex, 1).toString());
+        fournisseurPhone.setText(model.getValueAt(myIndex, 2).toString());
+        fournisseurEmail.setText(model.getValueAt(myIndex, 3).toString());
+        fournisseurAdresse.setText(model.getValueAt(myIndex, 4).toString());
+        if(fournisseurNom.getText().isEmpty()){
+            key = 0;
+        }else{
+            key = Integer.parseInt(model.getValueAt(myIndex, 0).toString());
+        }
+    }//GEN-LAST:event_fournisseurListMouseClicked
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void updateFournisseurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateFournisseurActionPerformed
+        if(fournisseurNom.getText().isEmpty() || fournisseurPhone.getText().isEmpty() || 
+           fournisseurEmail.getText().isEmpty() || fournisseurAdresse.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs !");
+        }
+        else{
+            try { 
+                countId();
+                con = DriverManager.getConnection("jdbc:mysql://localhost:3306/stockdb","root","");
+                PreparedStatement add = con.prepareStatement("update fournisseur set nom_fournisseur = ?,phone_fournisseur = ? ,email_fournisseur = ? ,adresse_fournisseur = ? where id_fournisseur = ?");
+                add.setInt(5, key);
+                add.setString(1, fournisseurNom.getText());
+                add.setString(2, fournisseurPhone.getText());
+                add.setString(3, fournisseurEmail.getText());
+                add.setString(4, fournisseurAdresse.getText());
+                int row = add.executeUpdate();
+                n++;
+                JOptionPane.showMessageDialog(this, "Fournisseur Modifié");
+                con.close();
+                displayFournisseurs();                
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+            }
+        }
+    }//GEN-LAST:event_updateFournisseurActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void delFournisseurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delFournisseurActionPerformed
+        if(key == 0 ){
+            JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs !");
+        }
+        else{
+            try { 
+                countId();
+                con = DriverManager.getConnection("jdbc:mysql://localhost:3306/stockdb","root","");
+                PreparedStatement add = con.prepareStatement("delete from fournisseur where id_fournisseur = ?");
+                add.setInt(1, key);
+                int row = add.executeUpdate();
+                n++;
+                JOptionPane.showMessageDialog(this, "Fournisseur Supprimé");
+                con.close();
+                displayFournisseurs();                
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+            }
+        }
+    }//GEN-LAST:event_delFournisseurActionPerformed
+
+    int fournisseurId;
+    void countId(){
+        try{
+            stC = con.createStatement();
+            rsC = stC.executeQuery("select Max(id_fournisseur) from fournisseur");
+            rsC.next();
+            fournisseurId = rsC.getInt(1)+1;
+        }
+        catch(Exception e){
+            
+        }
+    }
+    
+    public void displayFournisseurs(){
+        try{
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/stockdb","root","");
+            st = con.createStatement();
+            rs = st.executeQuery("select * from fournisseur");
+            //fournisseurList.setModel(DbUtils.);
+            
+            String columns[] = { "Identifiant", "Nom", "N° Telephone","Email","Adresse" };
+      String data[][] = new String[8][5];
+    
+      int i = 0;
+      while (rs.next()) {
+        int id = rs.getInt("id_fournisseur");
+        String nom = rs.getString("nom_fournisseur");
+        String age = rs.getString("phone_fournisseur");
+        String ase = rs.getString("email_fournisseur");
+        String adr = rs.getString("adresse_fournisseur");
+        data[i][0] = id + "";
+        data[i][1] = nom;
+        data[i][2] = age;
+        data[i][3] = ase;
+        data[i][4] = adr;
+        i++;
+      }
+    
+      DefaultTableModel model = new DefaultTableModel(data, columns);
+      
+      fournisseurList.setModel(model);
+        }
+        catch(Exception e){  
+        }
+        
+        
+    }
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -422,9 +583,13 @@ public class Fournisseurs extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton addFournisseur;
+    private javax.swing.JButton delFournisseur;
+    private javax.swing.JTextField fournisseurAdresse;
+    private javax.swing.JTextField fournisseurEmail;
+    private javax.swing.JTable fournisseurList;
+    private javax.swing.JTextField fournisseurNom;
+    private javax.swing.JTextField fournisseurPhone;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -456,10 +621,6 @@ public class Fournisseurs extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSeparator jSeparator7;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JButton updateFournisseur;
     // End of variables declaration//GEN-END:variables
 }
