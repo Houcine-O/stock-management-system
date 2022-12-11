@@ -412,7 +412,6 @@ public class Fournisseurs extends javax.swing.JFrame {
     Connection con = null;
     Statement st = null,stC = null;
     ResultSet rs = null,rsC = null;
-    int n=0;
     private void addFournisseurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addFournisseurActionPerformed
         if(fournisseurNom.getText().isEmpty() || fournisseurPhone.getText().isEmpty() || 
            fournisseurEmail.getText().isEmpty() || fournisseurAdresse.getText().isEmpty()){
@@ -429,7 +428,6 @@ public class Fournisseurs extends javax.swing.JFrame {
                 add.setString(4, fournisseurEmail.getText());
                 add.setString(5, fournisseurAdresse.getText());
                 int row = add.executeUpdate();
-                n++;
                 JOptionPane.showMessageDialog(this, "Fournisseur ajouté");
                 con.close();
                 displayFournisseurs();                
@@ -457,7 +455,7 @@ public class Fournisseurs extends javax.swing.JFrame {
     private void updateFournisseurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateFournisseurActionPerformed
         if(fournisseurNom.getText().isEmpty() || fournisseurPhone.getText().isEmpty() || 
            fournisseurEmail.getText().isEmpty() || fournisseurAdresse.getText().isEmpty()){
-            JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs !");
+            JOptionPane.showMessageDialog(this, "Veuillez sélectionner l'element que vous vouelez modifer !");
         }
         else{
             try { 
@@ -470,7 +468,6 @@ public class Fournisseurs extends javax.swing.JFrame {
                 add.setString(3, fournisseurEmail.getText());
                 add.setString(4, fournisseurAdresse.getText());
                 int row = add.executeUpdate();
-                n++;
                 JOptionPane.showMessageDialog(this, "Fournisseur Modifié");
                 con.close();
                 displayFournisseurs();                
@@ -482,18 +479,18 @@ public class Fournisseurs extends javax.swing.JFrame {
 
     private void delFournisseurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delFournisseurActionPerformed
         if(key == 0 ){
-            JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs !");
+            JOptionPane.showMessageDialog(this, "Veuillez rsélectionner quel element vous souhaiter supprimé !");
         }
         else{
             try { 
                 countId();
                 con = DriverManager.getConnection("jdbc:mysql://localhost:3306/stockdb","root","");
-                PreparedStatement add = con.prepareStatement("delete from fournisseur where id_fournisseur = ?");
-                add.setInt(1, key);
-                int row = add.executeUpdate();
-                n++;
+                PreparedStatement del = con.prepareStatement("delete from fournisseur where id_fournisseur = ?");
+                del.setInt(1, key);
+                int row = del.executeUpdate();
                 JOptionPane.showMessageDialog(this, "Fournisseur Supprimé");
                 con.close();
+                key=0;
                 displayFournisseurs();                
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage());
@@ -515,6 +512,7 @@ public class Fournisseurs extends javax.swing.JFrame {
     }
     
     public void displayFournisseurs(){
+ 
         try{
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/stockdb","root","");
             st = con.createStatement();
@@ -545,8 +543,7 @@ public class Fournisseurs extends javax.swing.JFrame {
         }
         catch(Exception e){  
         }
-        
-        
+        fournisseurList.removeColumn(fournisseurList.getColumnModel().getColumn(0));
     }
 
     public static void main(String args[]) {
