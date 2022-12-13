@@ -4,6 +4,18 @@
  */
 package com.mycompany.stockmgmt;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author houcine
@@ -15,6 +27,7 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
+        load();
     }
 
     /**
@@ -34,8 +47,8 @@ public class Login extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel19 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField1 = new javax.swing.JTextField();
+        userPass = new javax.swing.JTextField();
+        userName = new javax.swing.JTextField();
         jLabel18 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
@@ -94,7 +107,7 @@ public class Login extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(18, 6, 0, 0);
         jPanel4.add(jLabel19, gridBagConstraints);
 
-        jTextField2.setFont(new java.awt.Font("Microsoft YaHei", 0, 14)); // NOI18N
+        userPass.setFont(new java.awt.Font("Microsoft YaHei", 0, 14)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -102,9 +115,9 @@ public class Login extends javax.swing.JFrame {
         gridBagConstraints.ipady = 15;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 6);
-        jPanel4.add(jTextField2, gridBagConstraints);
+        jPanel4.add(userPass, gridBagConstraints);
 
-        jTextField1.setFont(new java.awt.Font("Microsoft YaHei", 0, 14)); // NOI18N
+        userName.setFont(new java.awt.Font("Microsoft YaHei", 0, 14)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -113,7 +126,7 @@ public class Login extends javax.swing.JFrame {
         gridBagConstraints.ipady = 15;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 6);
-        jPanel4.add(jTextField1, gridBagConstraints);
+        jPanel4.add(userName, gridBagConstraints);
 
         jLabel18.setFont(new java.awt.Font("Microsoft YaHei", 0, 16)); // NOI18N
         jLabel18.setText("Nom d'utilisateur");
@@ -139,6 +152,11 @@ public class Login extends javax.swing.JFrame {
         jButton3.setFont(new java.awt.Font("Microsoft YaHei", 1, 16)); // NOI18N
         jButton3.setForeground(new java.awt.Color(255, 255, 255));
         jButton3.setText("Connexion");
+        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton3MouseClicked(evt);
+            }
+        });
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -203,9 +221,37 @@ public class Login extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    Connection con = null;
+    Statement st = null,stC = null;
+    ResultSet rs = null,rsC = null;
+    Map<String, String> data = new HashMap<String, String> ();
+
+    public void load(){
+        try {
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/stockdb","root","");
+            st = con.createStatement();
+            rs = st.executeQuery("select * from employe");
+            while (rs.next()){
+                data.put(rs.getString(2),rs.getString(4));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.print(data);
+    }
+    
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+       String username = userName.getText();
+       String mdp = userPass.getText();
+        if (data.containsKey(username) && mdp.equals(data.get(username)) ){
+            this.dispose();
+            new Items().setVisible(true);
+        } 
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
+        
+    }//GEN-LAST:event_jButton3MouseClicked
 
     /**
      * @param args the command line arguments
@@ -254,7 +300,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField userName;
+    private javax.swing.JTextField userPass;
     // End of variables declaration//GEN-END:variables
 }
