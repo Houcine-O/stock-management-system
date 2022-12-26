@@ -4,6 +4,7 @@
  */
 package com.mycompany.stockmgmt;
 
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -56,6 +58,11 @@ public class Login extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 51, 153)));
@@ -108,6 +115,11 @@ public class Login extends javax.swing.JFrame {
         jPanel4.add(jLabel19, gridBagConstraints);
 
         userPass.setFont(new java.awt.Font("Microsoft YaHei", 0, 14)); // NOI18N
+        userPass.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                userPassKeyPressed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -160,6 +172,11 @@ public class Login extends javax.swing.JFrame {
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
+            }
+        });
+        jButton3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton3KeyPressed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -252,6 +269,28 @@ public class Login extends javax.swing.JFrame {
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
         
     }//GEN-LAST:event_jButton3MouseClicked
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        
+    }//GEN-LAST:event_formKeyPressed
+
+    private void jButton3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton3KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3KeyPressed
+
+    private void userPassKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_userPassKeyPressed
+        if (evt.getKeyCode()==KeyEvent.VK_ENTER){
+           String username = userName.getText();
+            String mdp = userPass.getText();
+        if (data.containsKey(username) && mdp.equals(data.get(username)) ){
+            this.dispose();
+            new Items().setVisible(true);
+        } 
+        else {
+            JOptionPane.showMessageDialog(this, "Nom d'utilisateur ou Mot de passe incorrecte");
+        }
+        }
+    }//GEN-LAST:event_userPassKeyPressed
 
     /**
      * @param args the command line arguments
